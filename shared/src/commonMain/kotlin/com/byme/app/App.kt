@@ -18,12 +18,15 @@ import org.jetbrains.compose.resources.painterResource
 
 import bymekmp.shared.generated.resources.Res
 import bymekmp.shared.generated.resources.compose_multiplatform
-
+import androidx.compose.runtime.LaunchedEffect
+import dev.gitlive.firebase.Firebase
+import dev.gitlive.firebase.firestore.firestore
+import com.byme.app.data.UserRepositoryImpl
 @Composable
 @Preview
 fun App() {
     MaterialTheme {
-        var showContent by remember { mutableStateOf(false) }
+        /*var showContent by remember { mutableStateOf(false) }
         Column(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.primaryContainer)
@@ -44,6 +47,35 @@ fun App() {
                     Text("Compose: $greeting")
                 }
             }
+        }*/
+        // --- prueba para conexion de bd remota ---
+        LaunchedEffect(Unit) {
+            println("DEBUG: Iniciando prueba de Firebase...")
+
+            try {
+                // Instanciamos Firebase y el Repositorio
+                val firestore = Firebase.firestore
+                val userRepository = UserRepositoryImpl(firestore)
+
+                // Llamamos a la función que queremos probar
+                val result = userRepository.getProfessionals()
+
+                // Vemos el resultado en la consola
+                result.onSuccess { professionals ->
+                    println("ÉXITO: Se encontraron ${professionals.size} profesionales")
+                    professionals.forEach { prof ->
+                        println("Profesional: ${prof.name} - Categoría: ${prof.category}")
+                    }
+                }.onFailure { error ->
+                    println("ERROR AL CARGAR: ${error.message}")
+                    error.printStackTrace()
+                }
+            } catch (e: Exception) {
+                println("EXCEPCIÓN: ${e.message}")
+            }
+        }
+        Column {
+            Text("ByMe KMP cargando...")
         }
     }
 }

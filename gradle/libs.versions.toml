@@ -20,6 +20,7 @@ serialization = "1.9.0"
 sqldelight = "2.0.2"
 koin = "4.0.0"
 coil = "3.0.0-rc01"
+firebaseBom = "33.5.1"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -43,6 +44,13 @@ compose-uiToolingPreview = { module = "org.jetbrains.compose.ui:ui-tooling-previ
 firebase-auth = { module = "dev.gitlive:firebase-auth", version.ref = "firebaseKmp" }
 firebase-firestore = { module = "dev.gitlive:firebase-firestore", version.ref = "firebaseKmp" }
 firebase-storage = { module = "dev.gitlive:firebase-storage", version.ref = "firebaseKmp" }
+
+# --- Firebase Android ---
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-common = { module = "com.google.firebase:firebase-common" }
+firebase-auth-android = { module = "com.google.firebase:firebase-auth" }
+firebase-common-ktx = { module = "com.google.firebase:firebase-common-ktx" }
+firebase-auth-ktx = { module = "com.google.firebase:firebase-auth-ktx" }
 
 # --- Navegación (Voyager) ---
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
@@ -74,3 +82,4 @@ composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "k
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
+googleServices = { id = "com.google.gms.google-services", version = "4.4.2" }

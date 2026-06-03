@@ -26,7 +26,7 @@ kotlin {
        minSdk = libs.versions.android.minSdk.get().toInt()
     
        compilerOptions {
-           jvmTarget = JvmTarget.JVM_11
+           jvmTarget = JvmTarget.JVM_17
        }
        androidResources {
            enable = true
@@ -41,6 +41,8 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             // Driver de base de datos para Android
             implementation(libs.sqldelight.android)
+            // BOM de Firebase para resolver versiones en Android (Requerido por GitLive)
+            implementation(project.dependencies.platform(libs.firebase.bom))
         }
         iosMain.dependencies {
             // Driver de base de datos para iOS
@@ -61,21 +63,13 @@ kotlin {
             implementation(libs.firebase.auth)
             implementation(libs.firebase.firestore)
 
-            // Navegación Voyager (Punto 4 de la guía)
+            // Navegación Voyager
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.screenmodel)
 
-            // Persistencia y Utils (Punto 3 de la guía)
+            // Persistencia y Utils
             implementation(libs.sqldelight.runtime)
             implementation(libs.kotlinx.serialization.json)
-        }
-
-        val androidMain by getting {
-            dependencies {
-                // ESTA LÍNEA ES LA SOLUCIÓN AL ERROR:
-                // Le da versiones reales a las librerías de Google que pide GitLive
-                implementation(project.dependencies.platform("com.google.firebase:firebase-bom:33.5.1"))
-            }
         }
 
         commonTest.dependencies {
@@ -84,6 +78,13 @@ kotlin {
     }
 }
 
+sqldelight {
+    databases {
+        create("ByMeDatabase") {
+            packageName.set("com.byme.app.database")
+        }
+    }
+}
 
 dependencies {
     androidRuntimeClasspath(libs.compose.uiTooling)

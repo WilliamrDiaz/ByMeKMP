@@ -14,6 +14,7 @@ import com.byme.app.ui.about.AboutScreen
 import com.byme.app.ui.auth.LoginScreen
 import com.byme.app.ui.auth.RegisterScreen
 import com.byme.app.ui.auth.SplashScreen
+import com.byme.app.ui.calendar.CalendarScreen
 import com.byme.app.ui.chat.ChatDetailScreen
 import com.byme.app.ui.chat.ChatListScreen
 import com.byme.app.ui.home.HomeScreen
@@ -133,7 +134,7 @@ sealed class AppScreens : Screen {
     object Calendar : Screen {
         @Composable
         override fun Content() {
-            // CalendarScreen().Content()
+            CalendarScreen().Content()
         }
     }
 }

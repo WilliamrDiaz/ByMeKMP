@@ -69,7 +69,9 @@ class UserRepositoryImpl(
                 .get()
 
             // Mapeamos los documentos a objetos User
-            val professionals = snapshot.documents.map { it.data<User>() }
+            val professionals = snapshot.documents.map {
+                it.data<User>().copy(id = it.id)
+            }
 
             professionals.forEach { localDataSource.insertUser(it) }
 
@@ -86,7 +88,7 @@ class UserRepositoryImpl(
                 .get()
 
             val filtered = snapshot.documents
-                .map { it.data<User>() }
+                .map { it.data<User>().copy(id = it.id) }
                 .filter {
                     it.name.contains(query, ignoreCase = true) ||
                             it.category.contains(query, ignoreCase = true)

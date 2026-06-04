@@ -42,6 +42,7 @@ class ChatListScreen : Screen {
             onNavigateToLogin = { navigator.push(AppScreens.Login) },
             onNavigateToProfile = { navigator.push(AppScreens.UserProfile) },
             onNavigateToHome = { navigator.popUntilRoot() },
+            onNavigateToCalendar = { navigator.push(AppScreens.Calendar) },
             viewModel = viewModel
         )
     }

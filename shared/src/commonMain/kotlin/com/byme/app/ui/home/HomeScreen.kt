@@ -40,8 +40,8 @@ class HomeScreen : Screen {
                     onNavigateToLogin = { navigator.push(AppScreens.Login) },
                     onNavigateToProfile = { navigator.push(AppScreens.UserProfile) },
                     onNavigateToMessages = { navigator.push(AppScreens.ChatList) },
-                    onNavigateToCalendar = { /* Próximamente */ },
-                    onNavigateToHome = { /* Ya estamos aquí */ }
+                    onNavigateToCalendar = { navigator.push(AppScreens.Calendar) },
+                    onNavigateToHome = { }
                 )
             }
         ) { paddingValues ->

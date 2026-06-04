@@ -182,6 +182,16 @@ fun BottomNavigationBar(
         NavigationBarItem(
             selected = false,
             onClick = {
+
+                if (Firebase.auth.currentUser != null) onNavigateToCalendar()
+                else onNavigateToLogin()
+            },
+            icon = { Icon(Icons.Default.CalendarMonth, contentDescription = null) },
+            label = { Text("Calendario") }
+        )
+        NavigationBarItem(
+            selected = false,
+            onClick = {
                 if (Firebase.auth.currentUser != null) onNavigateToProfile()
                 else onNavigateToLogin()
             },

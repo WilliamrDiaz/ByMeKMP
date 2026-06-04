@@ -149,7 +149,6 @@
 			packageReferences = (
 				3DAA80242FCFAB2D008584E7 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				3DAA80292FCFAB52008584E7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
-				3D95418F2FD1509500C83F48 /* XCRemoteSwiftPackageReference "mapbox-maps-ios" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = C27F28FD6A22D481637AA933 /* Products */;
@@ -411,22 +410,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		3D95418E2FD14F5300C83F48 /* XCRemoteSwiftPackageReference "mapbox-maps-ios-binary" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/mapbox/mapbox-maps-ios-binary.git";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
-		3D95418F2FD1509500C83F48 /* XCRemoteSwiftPackageReference "mapbox-maps-ios" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/mapbox/mapbox-maps-ios.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 11.8.0;
-			};
-		};
 		3DAA80242FCFAB2D008584E7 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";

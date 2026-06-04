@@ -2,6 +2,8 @@ package com.byme.app.ui.navigation
 
 import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.core.screen.Screen
+import com.byme.app.ui.auth.LoginScreen
+import com.byme.app.ui.auth.RegisterScreen
 import com.byme.app.ui.auth.SplashScreen
 import com.byme.app.ui.home.HomeScreen
 
@@ -19,7 +21,7 @@ sealed class AppScreens : Screen {
     object Login : Screen {
         @Composable
         override fun Content() {
-            // LoginScreen().Content()
+            LoginScreen().Content()
         }
     }
 
@@ -27,7 +29,7 @@ sealed class AppScreens : Screen {
     object Register : Screen {
         @Composable
         override fun Content() {
-            // RegisterScreen().Content()
+            RegisterScreen().Content()
         }
     }
 

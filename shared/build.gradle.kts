@@ -80,6 +80,8 @@ kotlin {
 
             // Para los iconos (Search, Star, etc.)
             implementation("org.jetbrains.compose.material:material-icons-extended:1.7.3")
+
+            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.1")
         }
 
         commonTest.dependencies {

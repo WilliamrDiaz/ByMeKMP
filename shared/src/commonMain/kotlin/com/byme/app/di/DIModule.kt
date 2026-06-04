@@ -7,6 +7,8 @@ import com.byme.app.data.remote.repository.*
 import com.byme.app.domain.repository.*
 import com.byme.app.domain.usecase.*
 import com.byme.app.viewmodel.AuthScreenModel
+import com.byme.app.viewmodel.ChatDetailScreenModel
+import com.byme.app.viewmodel.ChatListScreenModel
 import com.byme.app.viewmodel.HomeScreenModel
 import com.byme.app.viewmodel.OfferServiceScreenModel
 import com.byme.app.viewmodel.ProfessionalDetailScreenModel
@@ -69,6 +71,8 @@ val screenModelModule = module {
     factory { ProfessionalProfileScreenModel(get(), get(), get(), get()) }
     factory { ProfileScreenModel(get(), get(), get()) }
     factory { UserTypeScreenModel(get(), get()) }
+    factory { ChatListScreenModel(get(), get(), get()) }
+    factory { ChatDetailScreenModel(get(), get(), get(), get()) }
 }
 
 // 4. Declaramos un expect para el módulo de plataforma (Base de datos)

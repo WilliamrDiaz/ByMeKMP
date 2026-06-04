@@ -24,6 +24,7 @@ class UserRepositoryImpl(
     }
 
     override suspend fun getUser(userId: String): Result<User> {
+        println("Buscando usuario en Firestore con ID: $userId")
         return try {
             // Primero intentar buscar en la base de datos local (iPhone/Android)
             val cachedUser = localDataSource.getUserById(userId)
@@ -34,7 +35,7 @@ class UserRepositoryImpl(
             // Si no está en local, buscar en Firestore
             val document = usersCollection.document(userId).get()
             if (document.exists) {
-                val user = document.data<User>()
+                val user = document.data<User>().copy(id = userId)
 
                 // Guardar en local para la próxima vez
                 localDataSource.insertUser(user)

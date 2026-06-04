@@ -28,10 +28,6 @@ import com.byme.app.ui.navigation.AppScreens
 import com.byme.app.viewmodel.ChatListScreenModel
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.auth.auth
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
-import kotlin.time.Clock
-import kotlin.time.Instant
 
 class ChatListScreen : Screen {
     @Composable
@@ -255,23 +251,4 @@ fun ChatItem(
     }
 }
 
-fun formatTime(timestamp: Long): String {
-    val now = Clock.System.now().toEpochMilliseconds()
-    val diff = now - timestamp
-
-    return when {
-        diff < 60_000 -> "Ahora"
-        diff < 3_600_000 -> "${diff / 60_000}m"
-        diff < 86_400_000 -> "${diff / 3_600_000}h"
-        else -> {
-            // Formatear la fecha dd/MM manualmente para evitar dependencias de Java
-            val instant = Instant.fromEpochMilliseconds(timestamp)
-            val dateTime = instant.toLocalDateTime(TimeZone.currentSystemDefault())
-
-            val day = dateTime.dayOfMonth.toString().padStart(2, '0')
-            val month = dateTime.monthNumber.toString().padStart(2, '0')
-
-            "$day/$month"
-        }
-    }
-}
+expect fun formatTime(timestamp: Long): String

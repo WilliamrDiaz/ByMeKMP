@@ -10,6 +10,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.byme.app.ui.about.AboutScreen
 import com.byme.app.ui.auth.LoginScreen
 import com.byme.app.ui.auth.RegisterScreen
 import com.byme.app.ui.auth.SplashScreen
@@ -125,7 +126,7 @@ sealed class AppScreens : Screen {
     object About : Screen {
         @Composable
         override fun Content() {
-            // AboutScreen().Content()
+            AboutScreen().Content()
         }
     }
 

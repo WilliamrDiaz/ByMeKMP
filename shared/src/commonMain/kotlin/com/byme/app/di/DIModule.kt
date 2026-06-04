@@ -11,6 +11,8 @@ import com.byme.app.viewmodel.HomeScreenModel
 import com.byme.app.viewmodel.OfferServiceScreenModel
 import com.byme.app.viewmodel.ProfessionalDetailScreenModel
 import com.byme.app.viewmodel.ProfessionalProfileScreenModel
+import com.byme.app.viewmodel.ProfileScreenModel
+import com.byme.app.viewmodel.UserTypeScreenModel
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.auth.auth
 import dev.gitlive.firebase.firestore.firestore
@@ -65,6 +67,8 @@ val screenModelModule = module {
     factory { OfferServiceScreenModel(get(), get(), get(), get(), get()) }
     factory { ProfessionalDetailScreenModel(get(), get(), get(), get(), get()) }
     factory { ProfessionalProfileScreenModel(get(), get(), get(), get()) }
+    factory { ProfileScreenModel(get(), get(), get()) }
+    factory { UserTypeScreenModel(get(), get()) }
 }
 
 // 4. Declaramos un expect para el módulo de plataforma (Base de datos)

@@ -43,10 +43,14 @@ kotlin {
             implementation(libs.sqldelight.android)
             // BOM de Firebase para resolver versiones en Android (Requerido por GitLive)
             implementation(project.dependencies.platform(libs.firebase.bom))
+            // ktor para Android
+            implementation(libs.ktor.client.okhttp)
         }
         iosMain.dependencies {
             // Driver de base de datos para iOS
             implementation(libs.sqldelight.native)
+            // ktor para iOS
+            implementation(libs.ktor.client.darwin)
         }
         commonMain.dependencies {
             // UI Compartida

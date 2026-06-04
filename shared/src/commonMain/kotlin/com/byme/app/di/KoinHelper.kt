@@ -5,7 +5,7 @@ import org.koin.dsl.KoinAppDeclaration
 
 fun initKoin(appDeclaration: KoinAppDeclaration = {}) = startKoin {
     appDeclaration()
-    modules(dataModule, domainModule, platformModule)
+    modules(dataModule, domainModule, platformModule, screenModelModule)
 }
 
 // Esta función es la que llamará el iPhone desde Swift

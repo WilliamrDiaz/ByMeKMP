@@ -15,10 +15,10 @@ kotlin = "2.3.21"
 material3 = "1.11.0-alpha07"
 # --- KMP
 firebaseKmp = "2.1.0"
-voyager = "1.1.0-beta02"
+voyager = "1.1.0-beta03"
 serialization = "1.9.0"
 sqldelight = "2.0.2"
-koin = "4.0.0"
+koin = "4.2.1"
 coil = "3.0.0-rc01"
 firebaseBom = "33.5.1"
 
@@ -56,6 +56,7 @@ firebase-auth-ktx = { module = "com.google.firebase:firebase-auth-ktx" }
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
 voyager-screenmodel = { module = "cafe.adriel.voyager:voyager-screenmodel", version.ref = "voyager" }
 voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
+voyager-koin = { module = "cafe.adriel.voyager:voyager-koin", version.ref = "voyager" }
 
 # --- Persistencia (SQLDelight) ---
 sqldelight-runtime = { module = "app.cash.sqldelight:runtime", version.ref = "sqldelight" }

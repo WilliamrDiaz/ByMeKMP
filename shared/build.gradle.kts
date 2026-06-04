@@ -72,6 +72,14 @@ kotlin {
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
+
+            implementation(libs.voyager.koin)
+            implementation(libs.coil.compose)
+            implementation(libs.coil.network.ktor)
+            implementation(libs.koin.compose)
+
+            // Para los iconos (Search, Star, etc.)
+            implementation("org.jetbrains.compose.material:material-icons-extended:1.7.3")
         }
 
         commonTest.dependencies {

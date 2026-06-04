@@ -19,10 +19,12 @@ import org.jetbrains.compose.resources.painterResource
 import bymekmp.shared.generated.resources.Res
 import bymekmp.shared.generated.resources.compose_multiplatform
 import androidx.compose.runtime.LaunchedEffect
+import cafe.adriel.voyager.navigator.Navigator
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.firestore.firestore
 import com.byme.app.data.remote.repository.UserRepositoryImpl
 import com.byme.app.domain.repository.UserRepositoryInterface
+import com.byme.app.ui.auth.SplashScreen
 import org.koin.compose.koinInject
 
 @Composable
@@ -51,6 +53,7 @@ fun App() {
                 }
             }
         }*/
+        Navigator(SplashScreen())
         // --- prueba para conexion de bd remota ---
         val userRepository = koinInject<UserRepositoryInterface>()
         LaunchedEffect(Unit) {
@@ -78,8 +81,8 @@ fun App() {
                 println("EXCEPCIÓN: ${e.message}")
             }*/
         }
-        Column {
+        /*Column {
             Text("ByMe KMP cargando...")
-        }
+        }*/
     }
 }

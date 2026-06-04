@@ -6,6 +6,7 @@ import com.byme.app.data.local.UserLocalDataSource
 import com.byme.app.data.remote.repository.*
 import com.byme.app.domain.repository.*
 import com.byme.app.domain.usecase.*
+import com.byme.app.viewmodel.HomeScreenModel
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.auth.auth
 import dev.gitlive.firebase.firestore.firestore
@@ -51,6 +52,10 @@ val domainModule = module {
     factory { AddReviewUseCase(get()) }
     factory { GetReviewsUseCase(get()) }
     factory { CreateAppointmentUseCase(get()) }
+}
+
+val screenModelModule = module {
+    factory { HomeScreenModel(get(), get()) }
 }
 
 // 3. Declaramos un expect para el módulo de plataforma (Base de datos)

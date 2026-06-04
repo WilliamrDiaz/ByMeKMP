@@ -8,6 +8,9 @@ import com.byme.app.domain.repository.*
 import com.byme.app.domain.usecase.*
 import com.byme.app.viewmodel.AuthScreenModel
 import com.byme.app.viewmodel.HomeScreenModel
+import com.byme.app.viewmodel.OfferServiceScreenModel
+import com.byme.app.viewmodel.ProfessionalDetailScreenModel
+import com.byme.app.viewmodel.ProfessionalProfileScreenModel
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.auth.auth
 import dev.gitlive.firebase.firestore.firestore
@@ -59,6 +62,9 @@ val domainModule = module {
 val screenModelModule = module {
     factory { HomeScreenModel(get(), get()) }
     factory { AuthScreenModel(get(), get(), get()) }
+    factory { OfferServiceScreenModel(get(), get(), get(), get(), get()) }
+    factory { ProfessionalDetailScreenModel(get(), get(), get(), get(), get()) }
+    factory { ProfessionalProfileScreenModel(get(), get(), get(), get()) }
 }
 
 // 4. Declaramos un expect para el módulo de plataforma (Base de datos)

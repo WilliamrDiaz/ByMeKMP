@@ -6,6 +6,9 @@ import com.byme.app.ui.auth.LoginScreen
 import com.byme.app.ui.auth.RegisterScreen
 import com.byme.app.ui.auth.SplashScreen
 import com.byme.app.ui.home.HomeScreen
+import com.byme.app.ui.professional.OfferServiceScreen
+import com.byme.app.ui.professional.ProfessionalDetailScreen
+import com.byme.app.ui.professional.ProfessionalProfileScreen
 
 sealed class AppScreens : Screen {
 
@@ -45,7 +48,7 @@ sealed class AppScreens : Screen {
     data class ProfessionalDetail(val professionalId: String) : Screen {
         @Composable
         override fun Content() {
-            // ProfessionalDetailScreen(professionalId).Content()
+            ProfessionalDetailScreen(professionalId).Content()
         }
     }
 
@@ -77,7 +80,7 @@ sealed class AppScreens : Screen {
     object ProfessionalProfile : Screen {
         @Composable
         override fun Content() {
-            // ProfessionalProfileScreen().Content()
+            ProfessionalProfileScreen().Content()
         }
     }
 
@@ -85,7 +88,7 @@ sealed class AppScreens : Screen {
     object OfferService : Screen {
         @Composable
         override fun Content() {
-            // OfferServiceScreen().Content()
+            OfferServiceScreen().Content()
         }
     }
 

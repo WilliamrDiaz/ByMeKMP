@@ -59,9 +59,11 @@ class AuthScreenModel(
         }
     }
 
-    suspend fun signOut() {
-        auth.signOut()
-        _uiState.update { AuthUiState() }
+    fun signOut() {
+        screenModelScope.launch {
+            auth.signOut()
+            _uiState.update { AuthUiState() }
+        }
     }
 
     fun resetState() {

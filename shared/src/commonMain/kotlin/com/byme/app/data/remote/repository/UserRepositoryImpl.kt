@@ -1,11 +1,13 @@
-package com.byme.app.data
+package com.byme.app.data.remote.repository
 
+import com.byme.app.data.local.UserLocalDataSource
 import com.byme.app.domain.model.User
 import com.byme.app.domain.repository.UserRepositoryInterface
 import dev.gitlive.firebase.firestore.FirebaseFirestore
 
 class UserRepositoryImpl(
-    private val firestore: FirebaseFirestore
+    private val firestore: FirebaseFirestore,
+    private val localDataSource: UserLocalDataSource
 ) : UserRepositoryInterface {
 
     private val usersCollection = firestore.collection("users")
@@ -13,7 +15,8 @@ class UserRepositoryImpl(
     override suspend fun createUser(user: User): Result<Unit> {
         return try {
             // En KMP usamos .set(user) directamente gracias a @Serializable
-            usersCollection.document(user.id).set(user)
+            usersCollection.document(user.id).set(user) // guardamos en Firestore
+            localDataSource.insertUser(user)// guardamos en local
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
@@ -22,10 +25,21 @@ class UserRepositoryImpl(
 
     override suspend fun getUser(userId: String): Result<User> {
         return try {
+            // Primero intentar buscar en la base de datos local (iPhone/Android)
+            val cachedUser = localDataSource.getUserById(userId)
+            if (cachedUser != null) {
+                return Result.success(cachedUser)
+            }
+
+            // Si no está en local, buscar en Firestore
             val document = usersCollection.document(userId).get()
             if (document.exists) {
-                // .data<User>() mapea el JSON al objeto de forma automática
-                Result.success(document.data())
+                val user = document.data<User>()
+
+                // Guardar en local para la próxima vez
+                localDataSource.insertUser(user)
+
+                Result.success(user)
             } else {
                 Result.failure(Exception("Usuario no encontrado"))
             }
@@ -37,7 +51,10 @@ class UserRepositoryImpl(
     override suspend fun updateUser(user: User): Result<Unit> {
         return try {
             // merge = true para actualizar solo los campos modificados
-            usersCollection.document(user.id).set(user, merge = true)
+            usersCollection.document(user.id).set(user, merge = true) // Actualizamos en Firestore
+
+            localDataSource.insertUser(user) // Actualizamos en local
+
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
@@ -52,6 +69,9 @@ class UserRepositoryImpl(
 
             // Mapeamos los documentos a objetos User
             val professionals = snapshot.documents.map { it.data<User>() }
+
+            professionals.forEach { localDataSource.insertUser(it) }
+
             Result.success(professionals)
         } catch (e: Exception) {
             Result.failure(e)

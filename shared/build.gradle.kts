@@ -70,6 +70,8 @@ kotlin {
             // Persistencia y Utils
             implementation(libs.sqldelight.runtime)
             implementation(libs.kotlinx.serialization.json)
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose)
         }
 
         commonTest.dependencies {
@@ -81,7 +83,7 @@ kotlin {
 sqldelight {
     databases {
         create("ByMeDatabase") {
-            packageName.set("com.byme.app.database")
+            packageName.set("com.byme.app.db")
         }
     }
 }

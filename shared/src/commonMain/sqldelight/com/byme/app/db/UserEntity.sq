@@ -1,0 +1,27 @@
+import kotlin.Boolean;
+
+CREATE TABLE UserEntity (
+    id TEXT NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    lastname TEXT NOT NULL,
+    email TEXT NOT NULL,
+    phone TEXT NOT NULL,
+    photoUrl TEXT NOT NULL,
+    isProfessional INTEGER AS Boolean NOT NULL DEFAULT 0,
+    category TEXT NOT NULL,
+    description TEXT NOT NULL
+);
+
+-- Consultas como los DAOs de Room
+insertUser:
+INSERT OR REPLACE INTO UserEntity(id, name, lastname, email, phone, photoUrl, isProfessional, category, description)
+VALUES ?;
+
+getUserById:
+SELECT * FROM UserEntity WHERE id = ?;
+
+getProfessionals:
+SELECT * FROM UserEntity WHERE isProfessional = 1;
+
+deleteAll:
+DELETE FROM UserEntity;

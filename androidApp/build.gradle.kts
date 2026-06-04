@@ -23,6 +23,9 @@ dependencies {
     // Firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.common)
+
+    implementation(libs.koin.android)
+    implementation(project(":shared"))
 }
 
 android {

@@ -21,7 +21,10 @@ import bymekmp.shared.generated.resources.compose_multiplatform
 import androidx.compose.runtime.LaunchedEffect
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.firestore.firestore
-import com.byme.app.data.UserRepositoryImpl
+import com.byme.app.data.remote.repository.UserRepositoryImpl
+import com.byme.app.domain.repository.UserRepositoryInterface
+import org.koin.compose.koinInject
+
 @Composable
 @Preview
 fun App() {
@@ -49,13 +52,14 @@ fun App() {
             }
         }*/
         // --- prueba para conexion de bd remota ---
+        val userRepository = koinInject<UserRepositoryInterface>()
         LaunchedEffect(Unit) {
             println("DEBUG: Iniciando prueba de Firebase...")
 
-            try {
+            //try {
                 // Instanciamos Firebase y el Repositorio
                 val firestore = Firebase.firestore
-                val userRepository = UserRepositoryImpl(firestore)
+
 
                 // Llamamos a la función que queremos probar
                 val result = userRepository.getProfessionals()
@@ -70,9 +74,9 @@ fun App() {
                     println("ERROR AL CARGAR: ${error.message}")
                     error.printStackTrace()
                 }
-            } catch (e: Exception) {
+            /*} catch (e: Exception) {
                 println("EXCEPCIÓN: ${e.message}")
-            }
+            }*/
         }
         Column {
             Text("ByMe KMP cargando...")

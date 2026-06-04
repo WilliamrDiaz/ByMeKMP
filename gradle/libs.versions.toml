@@ -65,6 +65,7 @@ sqldelight-native = { module = "app.cash.sqldelight:native-driver", version.ref 
 # --- Inyección de Dependencias (Koin - Reemplazo de Hilt) ---
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 
 # --- Serialización y Corrutinas ---
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }

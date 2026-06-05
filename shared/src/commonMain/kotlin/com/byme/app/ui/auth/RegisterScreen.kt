@@ -54,6 +54,8 @@ class RegisterScreen : Screen {
         }
 
         Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            containerColor = Color.White,
             topBar = {
                 TopAppBar(
                     title = { },

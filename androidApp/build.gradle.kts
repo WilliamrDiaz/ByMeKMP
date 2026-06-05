@@ -32,12 +32,20 @@ android {
     namespace = "com.byme.app"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
+    buildFeatures {
+        resValues = true
+    }
+
     defaultConfig {
         applicationId = "com.byme.app"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
+
+        // Inyectamos el token de Mapbox desde gradle.properties de forma segura
+        val publicToken = project.findProperty("MAPBOX_PUBLIC_TOKEN") ?: ""
+        resValue("string", "mapbox_access_token", publicToken.toString())
     }
     packaging {
         resources {

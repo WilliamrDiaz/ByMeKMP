@@ -1,5 +1,6 @@
 package com.byme.app.ui.professional
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,6 +29,11 @@ import com.byme.app.viewmodel.ProfessionalDetailScreenModel
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.auth.auth
 
+private val iOSBlue = Color(0xFF007AFF)
+private val iOSGray = Color(0xFF8E8E93)
+private val iOSLightGray = Color(0xFFF2F2F7)
+private val iOSAvatarBg = Color(0xFFE5F1FF)
+
 data class ProfessionalDetailScreen(val professionalId: String) : Screen {
 
     @OptIn(ExperimentalMaterial3Api::class)
@@ -43,19 +49,21 @@ data class ProfessionalDetailScreen(val professionalId: String) : Screen {
 
         Scaffold(
             modifier = Modifier.fillMaxSize(),
+            containerColor = Color.White,
             topBar = {
                 TopAppBar(
-                    title = { Text("Detalle del Profesional") },
+                    title = { Text("Detalle del Profesional", color = Color.Black, fontWeight = FontWeight.Bold) },
                     navigationIcon = {
                         IconButton(onClick = { navigator.pop() }) {
-                            Icon(Icons.AutoMirrored.Filled.ArrowBack, "Volver")
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, "Volver", tint = Color.Black)
                         }
                     },
                     actions = {
                         IconButton(onClick = { }) {
-                            Icon(Icons.Default.MoreVert, null)
+                            Icon(Icons.Default.MoreVert, null, tint = Color.Black)
                         }
-                    }
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
                 )
             },
             bottomBar = {
@@ -70,7 +78,7 @@ data class ProfessionalDetailScreen(val professionalId: String) : Screen {
         ) { paddingValues ->
             when {
                 uiState.isLoading -> {
-                    Box(Modifier.fillMaxSize(), Alignment.Center) { CircularProgressIndicator() }
+                    Box(Modifier.fillMaxSize(), Alignment.Center) { CircularProgressIndicator(color = iOSBlue) }
                 }
                 uiState.professional != null -> {
                     ProfessionalDetailContent(
@@ -103,6 +111,7 @@ data class ProfessionalDetailScreen(val professionalId: String) : Screen {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfessionalDetailContent(
     professional: User,
@@ -117,32 +126,36 @@ fun ProfessionalDetailContent(
     Column(modifier = modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(16.dp)) {
 
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Surface(modifier = Modifier.size(110.dp).clip(RoundedCornerShape(16.dp)), color = MaterialTheme.colorScheme.primaryContainer) {
+            Surface(modifier = Modifier.size(110.dp).clip(RoundedCornerShape(16.dp)), color = iOSAvatarBg) {
                 if (professional.photoUrl.isEmpty()) {
-                    Icon(Icons.Default.Person, null, modifier = Modifier.size(64.dp), tint = MaterialTheme.colorScheme.primary)
+                    Icon(Icons.Default.Person, null, modifier = Modifier.size(64.dp), tint = iOSBlue)
                 } else {
                     AsyncImage(model = professional.photoUrl, contentDescription = null, modifier = Modifier.fillMaxSize())
                 }
             }
             Spacer(Modifier.width(16.dp))
             Column {
-                Text("${professional.name} ${professional.lastname}", fontSize = 20.sp, fontWeight = FontWeight.Bold)
-                Text(professional.category, fontSize = 15.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
+                Text("${professional.name} ${professional.lastname}", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                Text(professional.category, fontSize = 15.sp, color = iOSGray)
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("${professional.rating}", fontSize = 14.sp, fontWeight = FontWeight.Medium)
-                    Icon(Icons.Default.Star, null, tint = Color(0xFFFFC107), modifier = Modifier.size(16.dp))
-                    Text(" (${professional.reviewCount} reseñas)", fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+                    Text("${professional.rating}", fontSize = 14.sp, fontWeight = FontWeight.Medium, color = Color.Black)
+                    Icon(Icons.Default.Star, null, tint = Color(0xFFFFCC00), modifier = Modifier.size(16.dp))
+                    Text(" (${professional.reviewCount} reseñas)", fontSize = 13.sp, color = iOSGray)
                 }
                 Spacer(Modifier.height(8.dp))
-                Button(onClick = onContactClick, shape = RoundedCornerShape(24.dp)) {
-                    Text("Contactar", fontWeight = FontWeight.Medium)
+                Button(
+                    onClick = onContactClick,
+                    shape = RoundedCornerShape(24.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = iOSBlue)
+                ) {
+                    Text("Contactar", fontWeight = FontWeight.Medium, color = Color.White)
                 }
             }
         }
 
         Spacer(Modifier.height(20.dp))
-        Text("Sobre mí", fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.primary)
-        Text(professional.description.ifEmpty { "Sin descripción disponible." }, fontSize = 14.sp, lineHeight = 20.sp)
+        Text("Descripción", fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = iOSGray)
+        Text(professional.description.ifEmpty { "Sin descripción disponible." }, fontSize = 14.sp, lineHeight = 20.sp, color = Color.Black)
 
         Spacer(Modifier.height(20.dp))
 
@@ -157,11 +170,21 @@ fun ProfessionalDetailContent(
                 "Reseñas" to Icons.Default.Star
             )
             tabs.forEachIndexed { index, (label, icon) ->
+                val isSelected = selectedTab == index
                 FilterChip(
-                    selected = selectedTab == index,
+                    selected = isSelected,
                     onClick = { onTabSelected(index) },
                     label = { Text(label) },
-                    leadingIcon = { Icon(icon, null, modifier = Modifier.size(16.dp)) }
+                    leadingIcon = { Icon(icon, null, modifier = Modifier.size(16.dp)) },
+                    colors = FilterChipDefaults.filterChipColors(
+                        selectedContainerColor = iOSBlue,
+                        selectedLabelColor = Color.White,
+                        selectedLeadingIconColor = Color.White,
+                        containerColor = Color.White,
+                        labelColor = Color.Black,
+                        iconColor = Color.Black
+                    ),
+                    border = if (!isSelected) BorderStroke(1.dp, iOSLightGray) else null
                 )
             }
         }
@@ -180,10 +203,15 @@ fun ProfessionalDetailContent(
 @Composable
 fun ServicesSection(services: List<Service>) {
     services.forEach { service ->
-        Card(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp), shape = RoundedCornerShape(12.dp)) {
+        Card(
+            modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+            shape = RoundedCornerShape(12.dp),
+            colors = CardDefaults.cardColors(containerColor = Color.White),
+            border = BorderStroke(1.dp, iOSLightGray)
+        ) {
             Column(Modifier.padding(12.dp)) {
-                Text(service.name, fontWeight = FontWeight.Bold)
-                Text(service.description, fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
+                Text(service.name, fontWeight = FontWeight.Bold, color = Color.Black)
+                Text(service.description, fontSize = 13.sp, color = iOSGray)
             }
         }
     }
@@ -192,10 +220,15 @@ fun ServicesSection(services: List<Service>) {
 @Composable
 fun SchedulesSection(schedules: List<Schedule>) {
     schedules.forEach { schedule ->
-        Card(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp), shape = RoundedCornerShape(12.dp)) {
+        Card(
+            modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+            shape = RoundedCornerShape(12.dp),
+            colors = CardDefaults.cardColors(containerColor = Color.White),
+            border = BorderStroke(1.dp, iOSLightGray)
+        ) {
             Column(Modifier.padding(12.dp)) {
-                Text(schedule.day, fontWeight = FontWeight.Bold)
-                Text(schedule.hours, fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
+                Text(schedule.day, fontWeight = FontWeight.Bold, color = Color.Black)
+                Text(schedule.hours, fontSize = 13.sp, color = iOSGray)
             }
         }
     }
@@ -204,13 +237,18 @@ fun SchedulesSection(schedules: List<Schedule>) {
 @Composable
 fun ReviewsSection(reviews: List<Review>) {
     reviews.forEach { review ->
-        Card(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp), shape = RoundedCornerShape(12.dp)) {
+        Card(
+            modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+            shape = RoundedCornerShape(12.dp),
+            colors = CardDefaults.cardColors(containerColor = Color.White),
+            border = BorderStroke(1.dp, iOSLightGray)
+        ) {
             Column(Modifier.padding(12.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(review.userName, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
-                    repeat(review.rating.toInt()) { Icon(Icons.Default.Star, null, tint = Color(0xFFFFC107), modifier = Modifier.size(14.dp)) }
+                    Text(review.userName, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f), color = Color.Black)
+                    repeat(review.rating.toInt()) { Icon(Icons.Default.Star, null, tint = Color(0xFFFFCC00), modifier = Modifier.size(14.dp)) }
                 }
-                Text(review.comment, fontSize = 13.sp)
+                Text(review.comment, fontSize = 13.sp, color = Color.Black)
             }
         }
     }

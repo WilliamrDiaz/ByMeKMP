@@ -1,11 +1,14 @@
 package com.byme.app.ui.professional
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -14,6 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -27,6 +31,12 @@ import com.byme.app.viewmodel.ProfessionalProfileScreenModel
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.auth.auth
 import kotlinx.coroutines.launch
+
+private val iOSBlue = Color(0xFF007AFF)
+private val iOSGray = Color(0xFF8E8E93)
+private val iOSLightGray = Color(0xFFF2F2F7)
+private val iOSAvatarBg = Color(0xFFE5F1FF)
+private val iOSRed = Color(0xFFFF3B30)
 
 class ProfessionalProfileScreen : Screen {
 
@@ -51,13 +61,19 @@ class ProfessionalProfileScreen : Screen {
 
         Scaffold(
             modifier = Modifier.fillMaxSize(),
+            containerColor = Color.White,
             topBar = {
                 TopAppBar(
-                    title = { Text("Perfil Profesional") },
+                    title = { Text("Mi Perfil Profesional", fontWeight = FontWeight.Bold, fontSize = 18.sp, color = Color.Black) },
+                    navigationIcon = {
+                        IconButton(onClick = { navigator.pop() }) {
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver", tint = Color.Black)
+                        }
+                    },
                     actions = {
                         var showMenu by remember { mutableStateOf(false) }
                         IconButton(onClick = { showMenu = true }) {
-                            Icon(Icons.Default.MoreVert, contentDescription = null)
+                            Icon(Icons.Default.MoreVert, contentDescription = null, tint = Color.Black)
                         }
                         DropdownMenu(
                             expanded = showMenu,
@@ -78,16 +94,16 @@ class ProfessionalProfileScreen : Screen {
                                             Firebase.auth.signOut()
                                             showMenu = false
                                             navigator.popUntilRoot()
-                                        }catch (e: Exception) {
+                                        } catch (e: Exception) {
                                             e.printStackTrace()
                                             showMenu = false
                                         }
                                     }
-
                                 }
                             )
                         }
-                    }
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
                 )
             },
             bottomBar = {
@@ -102,7 +118,7 @@ class ProfessionalProfileScreen : Screen {
         ) { paddingValues ->
             if (uiState.isLoading) {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator()
+                    CircularProgressIndicator(color = iOSBlue)
                 }
             } else {
                 Column(
@@ -119,29 +135,29 @@ class ProfessionalProfileScreen : Screen {
                             modifier = Modifier
                                 .size(100.dp)
                                 .clip(CircleShape),
-                            color = MaterialTheme.colorScheme.primaryContainer
+                            color = iOSAvatarBg
                         ) {
                             Box(contentAlignment = Alignment.Center) {
                                 Icon(
                                     imageVector = Icons.Default.Person,
                                     contentDescription = null,
                                     modifier = Modifier.size(60.dp),
-                                    tint = MaterialTheme.colorScheme.primary
+                                    tint = iOSBlue
                                 )
                             }
                         }
                         Surface(
                             modifier = Modifier.size(28.dp),
                             shape = CircleShape,
-                            color = MaterialTheme.colorScheme.surface,
-                            shadowElevation = 2.dp
+                            color = Color.White,
+                            shadowElevation = 4.dp
                         ) {
                             Box(contentAlignment = Alignment.Center) {
                                 Icon(
                                     imageVector = Icons.Default.Edit,
                                     contentDescription = null,
                                     modifier = Modifier.size(16.dp),
-                                    tint = MaterialTheme.colorScheme.onSurface
+                                    tint = Color.Black
                                 )
                             }
                         }
@@ -153,14 +169,19 @@ class ProfessionalProfileScreen : Screen {
                     OutlinedTextField(
                         value = uiState.name,
                         onValueChange = { viewModel.onNameChange(it) },
-                        placeholder = { Text("Nombre") },
+                        placeholder = { Text("Nombre", color = iOSGray) },
                         trailingIcon = {
                             Icon(Icons.Default.Edit, contentDescription = null,
-                                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                                tint = iOSGray.copy(alpha = 0.5f))
                         },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp),
-                        singleLine = true
+                        singleLine = true,
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = iOSGray.copy(alpha = 0.5f),
+                            unfocusedBorderColor = iOSLightGray,
+                            cursorColor = iOSBlue
+                        )
                     )
 
                     Spacer(modifier = Modifier.height(12.dp))
@@ -169,14 +190,19 @@ class ProfessionalProfileScreen : Screen {
                     OutlinedTextField(
                         value = uiState.lastname,
                         onValueChange = { viewModel.onLastnameChange(it) },
-                        placeholder = { Text("Apellido") },
+                        placeholder = { Text("Apellido", color = iOSGray) },
                         trailingIcon = {
                             Icon(Icons.Default.Edit, contentDescription = null,
-                                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                                tint = iOSGray.copy(alpha = 0.5f))
                         },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp),
-                        singleLine = true
+                        singleLine = true,
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = iOSGray.copy(alpha = 0.5f),
+                            unfocusedBorderColor = iOSLightGray,
+                            cursorColor = iOSBlue
+                        )
                     )
 
                     Spacer(modifier = Modifier.height(12.dp))
@@ -185,16 +211,21 @@ class ProfessionalProfileScreen : Screen {
                     OutlinedTextField(
                         value = uiState.description,
                         onValueChange = { viewModel.onDescriptionChange(it) },
-                        placeholder = { Text("Descripción de tu perfil") },
+                        placeholder = { Text("Descripción de tu perfil", color = iOSGray) },
                         trailingIcon = {
                             Icon(Icons.Default.Edit, contentDescription = null,
-                                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                                tint = iOSGray.copy(alpha = 0.5f))
                         },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(120.dp),
                         shape = RoundedCornerShape(12.dp),
-                        maxLines = 5
+                        maxLines = 5,
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = iOSGray.copy(alpha = 0.5f),
+                            unfocusedBorderColor = iOSLightGray,
+                            cursorColor = iOSBlue
+                        )
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -207,13 +238,13 @@ class ProfessionalProfileScreen : Screen {
                     ) {
                         Text(
                             text = "Servicios",
-                            fontWeight = FontWeight.Medium,
-                            fontSize = 14.sp,
-                            color = MaterialTheme.colorScheme.primary
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 15.sp,
+                            color = iOSBlue
                         )
                         IconButton(onClick = { showAddServiceDialog = true }) {
-                            Icon(Icons.Default.Add, contentDescription = "Agregar servicio",
-                                tint = MaterialTheme.colorScheme.primary)
+                            Icon(Icons.Default.AddCircle, contentDescription = "Agregar servicio",
+                                tint = iOSBlue)
                         }
                     }
 
@@ -221,7 +252,7 @@ class ProfessionalProfileScreen : Screen {
                         Text(
                             text = "No hay servicios registrados",
                             fontSize = 13.sp,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                            color = iOSGray
                         )
                     } else {
                         uiState.services.forEach { service ->
@@ -229,7 +260,7 @@ class ProfessionalProfileScreen : Screen {
                                 modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(12.dp),
                                 colors = CardDefaults.cardColors(
-                                    containerColor = MaterialTheme.colorScheme.surfaceVariant
+                                    containerColor = iOSLightGray.copy(alpha = 0.5f)
                                 )
                             ) {
                                 Row(
@@ -240,13 +271,13 @@ class ProfessionalProfileScreen : Screen {
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     Column(modifier = Modifier.weight(1f)) {
-                                        Text(text = service.name, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                                        Text(text = service.name, fontWeight = FontWeight.Bold, fontSize = 14.sp, color = Color.Black)
                                         Text(text = service.description, fontSize = 13.sp,
-                                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
+                                            color = iOSGray)
                                     }
                                     IconButton(onClick = { viewModel.removeService(service) }) {
-                                        Icon(Icons.Default.Close, contentDescription = "Eliminar",
-                                            tint = MaterialTheme.colorScheme.error)
+                                        Icon(Icons.Default.Cancel, contentDescription = "Eliminar",
+                                            tint = iOSRed)
                                     }
                                 }
                             }
@@ -264,13 +295,13 @@ class ProfessionalProfileScreen : Screen {
                     ) {
                         Text(
                             text = "Horarios",
-                            fontWeight = FontWeight.Medium,
-                            fontSize = 14.sp,
-                            color = MaterialTheme.colorScheme.primary
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 15.sp,
+                            color = iOSBlue
                         )
                         IconButton(onClick = { showAddScheduleDialog = true }) {
-                            Icon(Icons.Default.Add, contentDescription = "Agregar horario",
-                                tint = MaterialTheme.colorScheme.primary)
+                            Icon(Icons.Default.AddCircle, contentDescription = "Agregar horario",
+                                tint = iOSBlue)
                         }
                     }
 
@@ -278,7 +309,7 @@ class ProfessionalProfileScreen : Screen {
                         Text(
                             text = "No hay horarios agregados",
                             fontSize = 13.sp,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                            color = iOSGray
                         )
                     } else {
                         uiState.schedules.forEach { schedule ->
@@ -286,7 +317,7 @@ class ProfessionalProfileScreen : Screen {
                                 modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(12.dp),
                                 colors = CardDefaults.cardColors(
-                                    containerColor = MaterialTheme.colorScheme.surfaceVariant
+                                    containerColor = iOSLightGray.copy(alpha = 0.5f)
                                 )
                             ) {
                                 Row(
@@ -297,20 +328,20 @@ class ProfessionalProfileScreen : Screen {
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     Column(modifier = Modifier.weight(1f)) {
-                                        Text(text = schedule.day, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                                        Text(text = schedule.day, fontWeight = FontWeight.Bold, fontSize = 14.sp, color = Color.Black)
                                         schedule.hours.split("\n").forEach { jornada ->
                                             Row(verticalAlignment = Alignment.CenterVertically) {
                                                 Text(text = "•", fontSize = 13.sp,
-                                                    color = MaterialTheme.colorScheme.primary,
+                                                    color = iOSBlue,
                                                     modifier = Modifier.padding(end = 4.dp))
                                                 Text(text = jornada, fontSize = 13.sp,
-                                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
+                                                    color = iOSGray)
                                             }
                                         }
                                     }
                                     IconButton(onClick = { viewModel.removeSchedule(schedule) }) {
-                                        Icon(Icons.Default.Close, contentDescription = "Eliminar",
-                                            tint = MaterialTheme.colorScheme.error)
+                                        Icon(Icons.Default.Cancel, contentDescription = "Eliminar",
+                                            tint = iOSRed)
                                     }
                                 }
                             }
@@ -329,21 +360,24 @@ class ProfessionalProfileScreen : Screen {
                                 onClick = { viewModel.saveProfile() },
                                 modifier = Modifier.weight(1f).height(50.dp),
                                 shape = RoundedCornerShape(24.dp),
-                                enabled = !uiState.isSaving
+                                enabled = !uiState.isSaving,
+                                colors = ButtonDefaults.buttonColors(containerColor = iOSBlue)
                             ) {
                                 if (uiState.isSaving) {
                                     CircularProgressIndicator(
-                                        color = MaterialTheme.colorScheme.onPrimary,
+                                        color = Color.White,
                                         modifier = Modifier.size(24.dp)
                                     )
                                 } else {
-                                    Text("Guardar", fontSize = 16.sp)
+                                    Text("Guardar", fontSize = 16.sp, color = Color.White)
                                 }
                             }
                             OutlinedButton(
                                 onClick = { viewModel.loadProfile() },
                                 modifier = Modifier.weight(1f).height(50.dp),
-                                shape = RoundedCornerShape(24.dp)
+                                shape = RoundedCornerShape(24.dp),
+                                border = BorderStroke(1.dp, iOSBlue),
+                                colors = ButtonDefaults.outlinedButtonColors(contentColor = iOSBlue)
                             ) {
                                 Text("Cancelar", fontSize = 16.sp)
                             }
@@ -355,14 +389,14 @@ class ProfessionalProfileScreen : Screen {
                         Spacer(modifier = Modifier.height(12.dp))
                         Card(
                             colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colorScheme.errorContainer
+                                containerColor = iOSRed.copy(alpha = 0.1f)
                             ),
                             shape = RoundedCornerShape(8.dp),
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Text(
                                 text = error,
-                                color = MaterialTheme.colorScheme.error,
+                                color = iOSRed,
                                 fontSize = 14.sp,
                                 modifier = Modifier.padding(12.dp)
                             )
@@ -378,25 +412,36 @@ class ProfessionalProfileScreen : Screen {
         if (showAddServiceDialog) {
             AlertDialog(
                 onDismissRequest = { showAddServiceDialog = false },
-                title = { Text("Agregar servicio") },
+                containerColor = Color.White,
+                title = { Text("Agregar servicio", fontWeight = FontWeight.Bold, color = Color.Black) },
                 text = {
                     Column {
                         OutlinedTextField(
                             value = serviceName,
                             onValueChange = { serviceName = it },
-                            placeholder = { Text("Nombre del servicio") },
+                            placeholder = { Text("Nombre del servicio", color = iOSGray) },
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(12.dp),
-                            singleLine = true
+                            singleLine = true,
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedBorderColor = iOSBlue,
+                                unfocusedBorderColor = iOSLightGray,
+                                cursorColor = iOSBlue
+                            )
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         OutlinedTextField(
                             value = serviceDescription,
                             onValueChange = { serviceDescription = it },
-                            placeholder = { Text("Descripción del servicio") },
+                            placeholder = { Text("Descripción del servicio", color = iOSGray) },
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(12.dp),
-                            maxLines = 3
+                            maxLines = 3,
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedBorderColor = iOSBlue,
+                                unfocusedBorderColor = iOSLightGray,
+                                cursorColor = iOSBlue
+                            )
                         )
                     }
                 },
@@ -408,11 +453,13 @@ class ProfessionalProfileScreen : Screen {
                             serviceDescription = "";
                             showAddServiceDialog = false
                         }
-                    }) { Text("Agregar") }
+                    }, colors = ButtonDefaults.buttonColors(containerColor = iOSBlue)) {
+                        Text("Agregar", color = Color.White)
+                    }
                 },
                 dismissButton = {
-                    OutlinedButton(onClick = { showAddServiceDialog = false }) {
-                        Text("Cancelar")
+                    TextButton(onClick = { showAddServiceDialog = false }) {
+                        Text("Cancelar", color = iOSBlue)
                     }
                 }
             )
@@ -425,7 +472,8 @@ class ProfessionalProfileScreen : Screen {
 
             AlertDialog(
                 onDismissRequest = { showAddScheduleDialog = false },
-                title = { Text("Agregar horario") },
+                containerColor = Color.White,
+                title = { Text("Agregar horario", fontWeight = FontWeight.Bold, color = Color.Black) },
                 text = {
                     Column {
                         ExposedDropdownMenuBox(
@@ -436,15 +484,24 @@ class ProfessionalProfileScreen : Screen {
                                 value = uiState.selectedDay,
                                 onValueChange = { },
                                 readOnly = true,
-                                placeholder = { Text("Selecciona el día") },
+                                placeholder = { Text("Selecciona el día", color = iOSGray) },
                                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(dayExpanded) },
                                 modifier = Modifier.fillMaxWidth().menuAnchor(MenuAnchorType.PrimaryNotEditable),
-                                shape = RoundedCornerShape(12.dp)
+                                shape = RoundedCornerShape(12.dp),
+                                colors = OutlinedTextFieldDefaults.colors(
+                                    focusedBorderColor = iOSBlue,
+                                    unfocusedBorderColor = iOSLightGray,
+                                    cursorColor = iOSBlue
+                                )
                             )
-                            ExposedDropdownMenu(expanded = dayExpanded, onDismissRequest = { dayExpanded = false }) {
+                            ExposedDropdownMenu(
+                                expanded = dayExpanded,
+                                onDismissRequest = { dayExpanded = false },
+                                modifier = Modifier.background(Color.White)
+                            ) {
                                 viewModel.dayOptions.forEach { day ->
                                     DropdownMenuItem(
-                                        text = { Text(day) },
+                                        text = { Text(day, color = Color.Black) },
                                         onClick = {
                                             viewModel.onDaySelected(day);
                                             dayExpanded = false
@@ -466,20 +523,26 @@ class ProfessionalProfileScreen : Screen {
                                     value = uiState.selectedStartTime,
                                     onValueChange = { },
                                     readOnly = true,
-                                    placeholder = { Text("Inicio") },
+                                    placeholder = { Text("Inicio", color = iOSGray) },
                                     trailingIcon = {
                                         ExposedDropdownMenuDefaults.TrailingIcon(expanded = startTimeExpanded)
                                     },
                                     modifier = Modifier.fillMaxWidth().menuAnchor(MenuAnchorType.PrimaryNotEditable),
-                                    shape = RoundedCornerShape(12.dp)
+                                    shape = RoundedCornerShape(12.dp),
+                                    colors = OutlinedTextFieldDefaults.colors(
+                                        focusedBorderColor = iOSBlue,
+                                        unfocusedBorderColor = iOSLightGray,
+                                        cursorColor = iOSBlue
+                                    )
                                 )
                                 ExposedDropdownMenu(
                                     expanded = startTimeExpanded,
-                                    onDismissRequest = { startTimeExpanded = false }
+                                    onDismissRequest = { startTimeExpanded = false },
+                                    modifier = Modifier.background(Color.White)
                                 ) {
                                     viewModel.timeOptions.forEach { time ->
                                         DropdownMenuItem(
-                                            text = { Text(time) },
+                                            text = { Text(time, color = Color.Black) },
                                             onClick = {
                                                 viewModel.onStartTimeSelected(time);
                                                 startTimeExpanded = false
@@ -498,20 +561,26 @@ class ProfessionalProfileScreen : Screen {
                                     value = uiState.selectedEndTime,
                                     onValueChange = { },
                                     readOnly = true,
-                                    placeholder = { Text("Fin") },
+                                    placeholder = { Text("Fin", color = iOSGray) },
                                     trailingIcon = {
                                         ExposedDropdownMenuDefaults.TrailingIcon(expanded = endTimeExpanded)
                                     },
                                     modifier = Modifier.fillMaxWidth().menuAnchor(MenuAnchorType.PrimaryNotEditable),
-                                    shape = RoundedCornerShape(12.dp)
+                                    shape = RoundedCornerShape(12.dp),
+                                    colors = OutlinedTextFieldDefaults.colors(
+                                        focusedBorderColor = iOSBlue,
+                                        unfocusedBorderColor = iOSLightGray,
+                                        cursorColor = iOSBlue
+                                    )
                                 )
                                 ExposedDropdownMenu(
                                     expanded = endTimeExpanded,
-                                    onDismissRequest = { endTimeExpanded = false }
+                                    onDismissRequest = { endTimeExpanded = false },
+                                    modifier = Modifier.background(Color.White)
                                 ) {
                                     viewModel.timeOptions.forEach { time ->
                                         DropdownMenuItem(
-                                            text = { Text(time) },
+                                            text = { Text(time, color = Color.Black) },
                                             onClick = {
                                                 viewModel.onEndTimeSelected(time);
                                                 endTimeExpanded = false
@@ -527,11 +596,13 @@ class ProfessionalProfileScreen : Screen {
                     Button(onClick = {
                         viewModel.addSchedule();
                         showAddScheduleDialog = false
-                    }) { Text("Agregar") }
+                    }, colors = ButtonDefaults.buttonColors(containerColor = iOSBlue)) {
+                        Text("Agregar", color = Color.White)
+                    }
                 },
                 dismissButton = {
-                    OutlinedButton(onClick = { showAddScheduleDialog = false }) {
-                        Text("Cancelar")
+                    TextButton(onClick = { showAddScheduleDialog = false }) {
+                        Text("Cancelar", color = iOSBlue)
                     }
                 }
             )

@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
@@ -14,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -25,9 +27,13 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.byme.app.domain.model.Chat
 import com.byme.app.ui.home.BottomNavigationBar
 import com.byme.app.ui.navigation.AppScreens
+import com.byme.app.ui.theme.*
 import com.byme.app.viewmodel.ChatListScreenModel
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.auth.auth
+
+private val iOSLightGray = Color(0xFFF2F2F7)
+private val iOSAvatarBg = Color(0xFFE5F1FF)
 
 class ChatListScreen : Screen {
     @Composable
@@ -59,6 +65,7 @@ fun ChatListContent(
     viewModel: ChatListScreenModel
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val navigator = LocalNavigator.currentOrThrow
 
     // Lógica de ciclo de vida
     LaunchedEffect(Unit) {
@@ -67,14 +74,21 @@ fun ChatListContent(
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
+        containerColor = Color.White,
         topBar = {
-            TopAppBar(
-                title = { Text("Mensajes") },
+            CenterAlignedTopAppBar(
+                title = { Text("Mensajes", fontWeight = FontWeight.Bold, fontSize = 18.sp, color = Color.Black) },
+                navigationIcon = {
+                    IconButton(onClick = { navigator.pop() }) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver", tint = Color.Black)
+                    }
+                },
                 actions = {
                     IconButton(onClick = { }) {
-                        Icon(Icons.Default.MoreVert, contentDescription = null)
+                        Icon(Icons.Default.MoreVert, contentDescription = null, tint = Color.Black)
                     }
-                }
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.White)
             )
         },
         bottomBar = {
@@ -92,7 +106,7 @@ fun ChatListContent(
 
         if (uiState.isLoading) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
+                CircularProgressIndicator(color = BluePrimary)
             }
         } else if (allChats.isEmpty()) {
             Box(
@@ -103,13 +117,13 @@ fun ChatListContent(
                     Text(
                         text = "No tienes conversaciones aún",
                         fontSize = 16.sp,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                        color = LightBackground
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = "Contacta a un profesional para empezar",
                         fontSize = 13.sp,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
+                        color = LightBackground.copy(alpha = 0.6f)
                     )
                 }
             }
@@ -131,7 +145,11 @@ fun ChatListContent(
                         draft = uiState.drafts[chat.id] ?: "",
                         onClick = { onNavigateToChat(chat.id, displayName) }
                     )
-                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+                    HorizontalDivider(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        color = iOSLightGray,
+                        thickness = 0.5.dp
+                    )
                 }
             }
         }
@@ -151,8 +169,6 @@ fun ChatItem(
         chat.professionalName
     }
 
-    println("ChatItem: $displayName")
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -164,15 +180,15 @@ fun ChatItem(
         Surface(
             modifier = Modifier
                 .size(52.dp)
-                .clip(RoundedCornerShape(12.dp)),
-            color = MaterialTheme.colorScheme.primaryContainer
+                .clip(CircleShape),
+            color = iOSAvatarBg
         ) {
             Box(contentAlignment = Alignment.Center) {
                 Icon(
                     imageVector = Icons.Default.Person,
                     contentDescription = null,
                     modifier = Modifier.size(32.dp),
-                    tint = MaterialTheme.colorScheme.primary
+                    tint = BluePrimary
                 )
             }
         }
@@ -184,21 +200,22 @@ fun ChatItem(
             Text(
                 text = displayName,
                 fontWeight = FontWeight.Bold,
-                fontSize = 15.sp
+                fontSize = 16.sp,
+                color = Color.Black
             )
             when {
                 draft.isNotEmpty() -> {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
                             text = "Borrador: ",
-                            fontSize = 13.sp,
-                            color = MaterialTheme.colorScheme.error,
+                            fontSize = 14.sp,
+                            color = Color.Red,
                             fontWeight = FontWeight.Medium
                         )
                         Text(
                             text = draft,
-                            fontSize = 13.sp,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                            fontSize = 14.sp,
+                            color = LightBackground,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
@@ -207,8 +224,8 @@ fun ChatItem(
                 chat.lastMessage.isNotEmpty() -> {
                     Text(
                         text = chat.lastMessage,
-                        fontSize = 13.sp,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                        fontSize = 14.sp,
+                        color = LightBackground,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -216,8 +233,8 @@ fun ChatItem(
                 else -> {
                     Text(
                         text = "No hay mensajes aún",
-                        fontSize = 13.sp,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
+                        fontSize = 14.sp,
+                        color = LightBackground.copy(alpha = 0.5f)
                     )
                 }
             }
@@ -230,20 +247,20 @@ fun ChatItem(
             if (chat.lastMessageTime > 0) {
                 Text(
                     text = formatTime(chat.lastMessageTime),
-                    fontSize = 11.sp,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                    fontSize = 12.sp,
+                    color = LightBackground
                 )
             }
             if (chat.unreadCount > 0) {
                 Spacer(modifier = Modifier.height(4.dp))
                 Surface(
                     shape = CircleShape,
-                    color = MaterialTheme.colorScheme.primary
+                    color = BluePrimary
                 ) {
                     Text(
                         text = "${chat.unreadCount}",
                         fontSize = 11.sp,
-                        color = MaterialTheme.colorScheme.onPrimary,
+                        color = Color.White,
                         modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                     )
                 }

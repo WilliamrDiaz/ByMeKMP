@@ -8,6 +8,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -24,6 +25,8 @@ class CalendarScreen : Screen {
         val navigator = LocalNavigator.currentOrThrow
 
         Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            containerColor = Color.White,
             topBar = {
                 TopAppBar(
                     title = { Text("Calendario") },
@@ -80,7 +83,7 @@ class CalendarScreen : Screen {
                         text = "¡Mantente conectado!",
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
-                        color = MaterialTheme.colorScheme.secondary
+                        color = MaterialTheme.colorScheme.primary
                     )
                 }
             }

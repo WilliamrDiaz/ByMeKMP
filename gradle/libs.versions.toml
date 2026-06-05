@@ -22,6 +22,8 @@ koin = "4.2.1"
 coil = "3.0.0-rc01"
 firebaseBom = "33.5.1"
 ktor = "3.0.0"
+mapbox = "11.1.0"
+playServicesMaps = "20.0.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -80,6 +82,10 @@ coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor3", version.re
 # --- Ktor ---
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
+
+# --- Mapbox ---
+mapbox-android = { module = "com.mapbox.maps:android", version.ref = "mapbox" }
+play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

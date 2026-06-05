@@ -45,6 +45,9 @@ kotlin {
             implementation(project.dependencies.platform(libs.firebase.bom))
             // ktor para Android
             implementation(libs.ktor.client.okhttp)
+            // Mapbox Android
+            implementation(libs.mapbox.android)
+            implementation(libs.play.services.maps)
         }
         iosMain.dependencies {
             // Driver de base de datos para iOS

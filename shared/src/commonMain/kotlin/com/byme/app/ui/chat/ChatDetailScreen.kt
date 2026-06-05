@@ -13,6 +13,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -21,6 +22,9 @@ import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.byme.app.domain.model.Message
+import com.byme.app.ui.theme.BlueContainer
+import com.byme.app.ui.theme.BluePrimary
+import com.byme.app.ui.theme.LightBackground
 import com.byme.app.viewmodel.ChatDetailScreenModel
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.auth.auth
@@ -53,60 +57,85 @@ data class ChatDetailScreen(
 
         Scaffold(
             modifier = Modifier.fillMaxSize(),
+            containerColor = Color.White,
             topBar = {
-                TopAppBar(
-                    title = { Text(text = professionalName, fontWeight = FontWeight.Bold) },
+                CenterAlignedTopAppBar(
+                    title = { Text(text = professionalName, fontWeight = FontWeight.Bold, fontSize = 17.sp, color = Color.Black) },
                     navigationIcon = {
                         IconButton(onClick = { navigator.pop() }) {
-                            Icon(Icons.AutoMirrored.Filled.ArrowBack, "Volver")
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, "Volver", tint = Color.Black)
                         }
                     },
                     actions = {
                         IconButton(onClick = { }) {
-                            Icon(Icons.Default.MoreVert, null)
+                            Icon(Icons.Default.MoreVert, null, tint = Color.Black)
                         }
-                    }
+                    },
+                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                        containerColor = Color.White,
+                        titleContentColor = Color.Black,
+                        navigationIconContentColor = Color.Black,
+                        actionIconContentColor = Color.Black
+                    )
                 )
             },
             bottomBar = {
                 // Barra de escritura
-                Surface(shadowElevation = 8.dp) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        OutlinedTextField(
-                            value = uiState.messageText,
-                            onValueChange = { viewModel.onMessageTextChange(it) },
-                            placeholder = { Text("Escribe un mensaje...") },
-                            modifier = Modifier.weight(1f),
-                            shape = RoundedCornerShape(24.dp),
-                            maxLines = 3
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        IconButton(
-                            onClick = { viewModel.sendMessage() },
-                            enabled = uiState.messageText.isNotBlank()
+                Surface(
+                    color = Color.White,
+                    modifier = Modifier.navigationBarsPadding()
+                ) {
+                    Column {
+                        HorizontalDivider(color = BlueContainer, thickness = 0.5.dp)
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp, vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.Send,
-                                contentDescription = "Enviar",
-                                tint = if (uiState.messageText.isNotBlank())
-                                    MaterialTheme.colorScheme.primary
-                                else
-                                    MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
+                            OutlinedTextField(
+                                value = uiState.messageText,
+                                onValueChange = { viewModel.onMessageTextChange(it) },
+                                placeholder = { Text("Escribe un mensaje...", color = LightBackground) },
+                                modifier = Modifier.weight(1f),
+                                shape = RoundedCornerShape(20.dp),
+                                maxLines = 3,
+                                colors = OutlinedTextFieldDefaults.colors(
+                                    focusedBorderColor = BlueContainer,
+                                    unfocusedBorderColor = BlueContainer,
+                                    focusedContainerColor = Color.White,
+                                    unfocusedContainerColor = Color.White,
+                                    cursorColor = BluePrimary
+                                )
                             )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            IconButton(
+                                onClick = { viewModel.sendMessage() },
+                                enabled = uiState.messageText.isNotBlank()
+                            ) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.Send,
+                                    contentDescription = "Enviar",
+                                    tint = if (uiState.messageText.isNotBlank())
+                                        BluePrimary
+                                    else
+                                        LightBackground.copy(alpha = 0.3f)
+                                )
+                            }
                         }
                     }
                 }
             }
         ) { paddingValues ->
             if (uiState.isLoading) {
-                Box(Modifier.fillMaxSize(), Alignment.Center) { CircularProgressIndicator() }
+                Box(Modifier.fillMaxSize(), Alignment.Center) { CircularProgressIndicator(color = BluePrimary) }
             } else {
                 LazyColumn(
                     state = listState,
-                    modifier = Modifier.fillMaxSize().padding(paddingValues).padding(horizontal = 16.dp),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues)
+                        .padding(horizontal = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                     contentPadding = PaddingValues(vertical = 16.dp)
                 ) {
@@ -130,26 +159,26 @@ fun MessageBubble(message: Message, isCurrentUser: Boolean) {
     ) {
         Surface(
             shape = RoundedCornerShape(
-                topStart = 16.dp,
-                topEnd = 16.dp,
-                bottomStart = if (isCurrentUser) 16.dp else 4.dp,
-                bottomEnd = if (isCurrentUser) 4.dp else 16.dp
+                topStart = 18.dp,
+                topEnd = 18.dp,
+                bottomStart = if (isCurrentUser) 18.dp else 4.dp,
+                bottomEnd = if (isCurrentUser) 4.dp else 18.dp
             ),
-            color = if (isCurrentUser) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
+            color = if (isCurrentUser) BluePrimary else LightBackground,
             modifier = Modifier.widthIn(max = 280.dp)
         ) {
-            Column(modifier = Modifier.padding(12.dp)) {
+            Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp)) {
                 Text(
                     text = message.text,
-                    fontSize = 14.sp,
-                    color = if (isCurrentUser) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
+                    fontSize = 15.sp,
+                    color = if (isCurrentUser) Color.White else Color.Black
                 )
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = formatTime(message.timestamp),
-                    fontSize = 10.sp,
-                    color = if (isCurrentUser) MaterialTheme.colorScheme.onPrimary.copy(0.7f) else MaterialTheme.colorScheme.onSurface.copy(0.5f),
-                    modifier = Alignment.End.let { Modifier.align(it) }
+                    fontSize = 11.sp,
+                    color = if (isCurrentUser) Color.White.copy(0.7f) else LightBackground,
+                    modifier = Modifier.align(Alignment.End)
                 )
             }
         }

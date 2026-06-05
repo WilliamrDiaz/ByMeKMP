@@ -95,7 +95,7 @@ class ProfessionalProfileScreen : Screen {
                     onNavigateToLogin = { navigator.push(AppScreens.Login) },
                     onNavigateToProfile = { },
                     onNavigateToMessages = { navigator.push(AppScreens.ChatList) },
-                    onNavigateToCalendar = { },
+                    onNavigateToCalendar = { navigator.push(AppScreens.Calendar) },
                     onNavigateToHome = { navigator.popUntilRoot() }
                 )
             }

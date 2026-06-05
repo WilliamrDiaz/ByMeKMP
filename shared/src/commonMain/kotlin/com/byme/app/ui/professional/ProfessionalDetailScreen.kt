@@ -146,9 +146,16 @@ fun ProfessionalDetailContent(
 
         Spacer(Modifier.height(20.dp))
 
-        //  iconos de pestañas
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            val tabs = listOf("Servicios" to Icons.Default.Work, "Horarios" to Icons.Default.Schedule, "Reseñas" to Icons.Default.Star)
+        // Iconos de pestañas
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)
+        ) {
+            val tabs = listOf(
+                "Servicios" to Icons.Default.Work,
+                "Horarios" to Icons.Default.Schedule,
+                "Reseñas" to Icons.Default.Star
+            )
             tabs.forEachIndexed { index, (label, icon) ->
                 FilterChip(
                     selected = selectedTab == index,
@@ -186,9 +193,9 @@ fun ServicesSection(services: List<Service>) {
 fun SchedulesSection(schedules: List<Schedule>) {
     schedules.forEach { schedule ->
         Card(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp), shape = RoundedCornerShape(12.dp)) {
-            Row(Modifier.padding(12.dp), horizontalArrangement = Arrangement.SpaceBetween) {
-                Text(schedule.day, fontWeight = FontWeight.Medium)
-                Text(schedule.hours, color = MaterialTheme.colorScheme.primary)
+            Column(Modifier.padding(12.dp)) {
+                Text(schedule.day, fontWeight = FontWeight.Bold)
+                Text(schedule.hours, fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
             }
         }
     }
